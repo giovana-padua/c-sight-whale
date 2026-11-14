@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
-#include <unistd.h>
 #include <time.h>
 
 #define MAX 10
@@ -32,6 +31,9 @@ int main()
     int whales_count = 0;
     char stop;
     
+
+    pointer = fopen(name_archive, "a");
+
     do {
         printf("\nWhale %i", whales_count);
         
@@ -42,7 +44,7 @@ int main()
             info_time->tm_mon + 1,      // Month go of 0 to 11
             info_time->tm_year + 1900); // Counting years starts in 1900"
             
-        snprintf(time_report, sizeof(day_report), "Time: %02d:%02d:%02d",
+        snprintf(time_report, sizeof(day_report), "\nTime: %02d:%02d:%02d",
             info_time->tm_hour, 
             info_time->tm_min, 
             info_time->tm_sec);
@@ -77,69 +79,35 @@ int main()
         scanf("%s", activity);
         
         
-        if (whales_count == 0 && access(name_archive, F_OK) != 0) {
-            pointer = fopen(name_archive, "a");
-            
+        if (whales_count == 0) {            
             if (pointer == NULL) {
                 fprintf(pointer, "Error: Null");
             }
             else {
-                fprintf(pointer, "%s\nNumber of whales sighted: %i",
-                    day_report,
-                    whales_count + 1);
-                fprintf(pointer, "\n\n%s \nCode: %s\nSpecie: %s\nLocal: %s\nActivity: %s\n\n",
-                    time_report,
-                    whales[whales_count].id, 
-                    whales[whales_count].specie, 
-                    local, 
-                    activity);
+                fprintf(pointer, "%s\n", day_report);
             }
-            
-            fclose(pointer);
+        }
+
+        if (whales_count > 0) {
+            if (pointer == NULL) {
+                fprintf(pointer, "Error: Null");
+            }
+            else {
+                fprintf(pointer, "\n");
+            }
         }
         
         
-        else if (whales_count > 0) {
-            pointer = fopen(name_archive, "a");
-            
-            if (pointer == NULL) {
-                fprintf(pointer, "Error: Null");
-            }
-            else {
-                fprintf(pointer, "\n\n%s \nCode: %s\nSpecie: %s\nLocal: %s\nActivity: %s\n\n",
-                    time_report,
-                    whales[whales_count].id, 
-                    whales[whales_count].specie, 
-                    local, 
-                    activity);
-            }
-            
-            fclose(pointer);
-        }
-        
-        
-        else if (whales_count == 0 && access(name_archive, F_OK) == 0) {
-            pointer = fopen(name_archive, "a");
-            
-            if (pointer == NULL) {
-                fprintf(pointer, "Error: Null");
-            }
-            else {
-                fprintf(pointer, "%s\nNumber of whales sighted: %i",
-                    day_report,
-                    whales_count + 1);
-                fprintf(pointer, "\n\n%s \nCode: %s\nSpecie: %s\nLocal: %s\nActivity: %s\n\n",
-                    time_report,
-                    whales[whales_count].id, 
-                    whales[whales_count].specie, 
-                    local, 
-                    activity);
-            }
-            
-            fclose(pointer);
+        if (pointer == NULL) {
+            fprintf(pointer, "Error: Null");
         }
         else {
-            printf("Error.");
+            fprintf(pointer, "%s\nCode: %s\nSpecie: %s\nLocal: %s\nActivity: %s",
+                time_report,
+                whales[whales_count].id, 
+                whales[whales_count].specie, 
+                &local, 
+                &activity);
         }
         
         whales_count++;
@@ -149,6 +117,8 @@ int main()
         stop = tolower(stop);
         
     } while (stop != 'y');
+
+    pointer == NULL ? fprintf(pointer, "Error: Null") : fprintf(pointer, "\nNumber of whales sighted: %i\n\n", whales_count);
     
-    //fclose(pointer);
+    fclose(pointer);
 }
