@@ -64,12 +64,16 @@ int main()
                 break;
         }
         
-        sprintf(whales[whales_count].id, "%02d%02d/%i%i", info_time->tm_mday, info_time->tm_mon + 1, code_specie, whales_count);
+        sprintf(whales[whales_count].id, "%02d%02d/%i%i", 
+            info_time->tm_mday, 
+            info_time->tm_mon + 1, 
+            code_specie, 
+            whales_count);
         
         printf("\nWhere have you saw?: ");
         scanf("%s", local);
         
-        printf("\nWhat the whale was doing? Example: breathing, eating, attacking: ");
+        printf("\nWhat the whale was doing? Example: breathing, eating: ");
         scanf("%s", activity);
         
         
